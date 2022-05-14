@@ -33,8 +33,9 @@ class Client {
      * @warn WHATEVER HAPPENS TO YOUR ACCOUNT AS A RESULT OF THIS LIBRARY IS WITHIN YOUR OWN LIABILITY. THIS LIBRARY IS MADE PURELY FOR TESTS AND FUN. USE AT YOUR OWN RISK.
      * @param {string} token Auth token for the user account you want to login to
      * @param {BotConfigOpts} config The configuration for the Client
+     * @param start_on_init Starts the Client on creation
      */
-    constructor(token, config = BotConfigOpts) {
+    constructor(token, config = BotConfigOpts, start_on_init = true) {
         if (typeof token !== "string") throw new DiscordUserBotsError("Invalid token");
         this.config = {
             ...BotConfigOpts,
@@ -49,6 +50,12 @@ class Client {
         // If node is version 18.x or above use the native fetch, otherwise the node-fetch.
         this.requester = typeof fetch !== "undefined" ? fetch : NodeFetch;
 
+        if(start_on_init)
+            this.start()
+    }
+
+
+    start() {
         this.check_token().then((res) => {
             if (res === true) this.setEvents();
             else throw new DiscordAPIError(`Discord rejected token "${token}" (Not valid)`);
