@@ -68,7 +68,7 @@ class Client {
      */
     setEvents() {
         this.ready_state = ReadyStates.CONNECTING;
-        this.ws = new WebSocket(this.config.wsurl);
+        this.ws = new WebSocket(this.config.wsurl, {agent: this.config.proxy})
         this.ws.on("message", (message) => {
             message = JSON.parse(message);
             switch (message.t) {
@@ -355,7 +355,7 @@ class Client {
      */
     check_token() {
         return new Promise((resolve) => {
-            this.requester(`https://discord.com/api/${this.config.api}/users/@me`, new packets.TokenCheck(this.token)).then((r) => {
+            this.requester(`https://discord.com/api/${this.config.api}/users/@me`, {...new packets.TokenCheck(this.token), agent: this.config.proxy}).then((r) => {
                 r.json().then((res) => {
                     resolve(res.message !== "401: Unauthorized");
                 });
@@ -412,6 +412,7 @@ class Client {
                 method: options.method,
                 mode: "cors",
                 credentials: "include",
+                agent: this.config.proxy,
             }).then((response) => {
                 if (options.parse) {
                     response.json().then((m) => {
