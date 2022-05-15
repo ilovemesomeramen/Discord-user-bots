@@ -56,9 +56,9 @@ class Client {
 
 
     start() {
-        this.check_token().then((res) => {
+        return this.check_token().then((res) => {
             if (res === true) this.setEvents();
-            else throw new DiscordAPIError(`Discord rejected token "${token}" (Not valid)`);
+            else throw new DiscordAPIError(`Discord rejected token "${this.token}" (Not valid)`);
         });
     }
 
