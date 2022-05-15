@@ -63,6 +63,9 @@ class DiscordEvents {
     // Custom made ones
     embed_sent(message) {}
     message_edit(message) {}
+
+    //Error
+    discord_error(error) { throw error }
 }
 
 module.exports = DiscordEvents;

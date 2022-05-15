@@ -75,7 +75,10 @@ class Client {
                 case null: {
                     // gateway
                     if (this.ready_status !== ReadyStates.CONNECTED) {
-                        if (message.d === null) throw new DiscordAPIError("Discord refused a connection.");
+                        if (message.d === null) {
+                            this.on.discord_error(new DiscordAPIError("Discord refused a connection."));
+                            return
+                        }
                         this.heartbeattimer = message.d.heartbeat_interval;
                         this.heartbeatinterval = setInterval(() => {
                             this.ws.send(JSON.stringify(new packets.HeartBeat(this.lastHeartBeat)));
