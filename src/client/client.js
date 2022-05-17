@@ -357,12 +357,12 @@ class Client {
      * @private
      */
     check_token() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, rej) => {
             this.requester(`https://discord.com/api/${this.config.api}/users/@me`, {...new packets.TokenCheck(this.token), agent: this.config.proxy}).then((r) => {
                 r.json().then((res) => {
                     resolve(res.message !== "401: Unauthorized");
                 });
-            });
+            }).catch(rej);
         });
     }
 
